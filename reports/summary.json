@@ -1,0 +1,19 @@
+{
+  "total": 14,
+  "risk_score": 63.6,
+  "by_severity": {
+    "critical": 3,
+    "high": 6,
+    "medium": 4,
+    "low": 1
+  },
+  "by_service": {
+    "S3": 4,
+    "IAM": 4,
+    "EC2": 2,
+    "CloudTrail": 1,
+    "VPC": 1,
+    "KMS": 1,
+    "GuardDuty": 1
+  }
+}

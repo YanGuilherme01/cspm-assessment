@@ -1,0 +1,24 @@
+{
+  "assessment": {
+    "account_label": "cspm-insecure-lab (sandbox)",
+    "region": "us-east-1",
+    "data_origin": "synthetic",
+    "note": "Findings describe the misconfigurations intentionally declared in terraform/insecure-lab. They are the expected scanner output for that lab, not results captured from a real AWS account."
+  },
+  "findings": [
+    {"id": "F01", "severity": "critical", "service": "S3",         "title": "Bucket with public-read ACL",                 "check": "s3_bucket_public_access",              "remediation": "Enable S3 Block Public Access and remove the public ACL",             "terraform_fix": "remediation/s3.tf"},
+    {"id": "F02", "severity": "high",     "service": "S3",         "title": "Bucket without default encryption",           "check": "s3_bucket_default_encryption",         "remediation": "Enable SSE-KMS (or SSE-S3) default encryption",                       "terraform_fix": "remediation/s3.tf"},
+    {"id": "F03", "severity": "high",     "service": "IAM",        "title": "Access key older than 90 days",               "check": "iam_rotate_access_key_90_days",        "remediation": "Rotate the key; prefer IAM roles and short-lived credentials",        "terraform_fix": "remediation/iam.tf"},
+    {"id": "F04", "severity": "critical", "service": "IAM",        "title": "Inline policy allows Action * on Resource *", "check": "iam_inline_policy_no_administrative",  "remediation": "Replace with a least-privilege, resource-scoped policy",              "terraform_fix": "remediation/iam.tf"},
+    {"id": "F05", "severity": "critical", "service": "EC2",        "title": "Security group allows SSH from 0.0.0.0/0",    "check": "ec2_securitygroup_allow_ingress_from_internet_to_tcp_port_22", "remediation": "Remove port 22 or restrict it to a bastion CIDR; prefer SSM Session Manager", "terraform_fix": "remediation/network.tf"},
+    {"id": "F06", "severity": "high",     "service": "CloudTrail", "title": "No multi-region trail configured",            "check": "cloudtrail_multi_region_enabled",      "remediation": "Create a multi-region trail with log file validation",                "terraform_fix": "remediation/logging.tf"},
+    {"id": "F07", "severity": "high",     "service": "IAM",        "title": "Root account MFA not enabled",                "check": "iam_root_mfa_enabled",                 "remediation": "Enable hardware MFA on root; avoid root for daily operations",         "terraform_fix": "manual"},
+    {"id": "F08", "severity": "high",     "service": "VPC",        "title": "VPC Flow Logs disabled",                      "check": "vpc_flow_logs_enabled",                "remediation": "Enable flow logs to CloudWatch Logs or S3",                           "terraform_fix": "remediation/network.tf"},
+    {"id": "F09", "severity": "medium",   "service": "S3",         "title": "Bucket versioning disabled",                  "check": "s3_bucket_object_versioning",          "remediation": "Enable versioning for recovery from deletion and ransomware",         "terraform_fix": "remediation/s3.tf"},
+    {"id": "F10", "severity": "medium",   "service": "KMS",        "title": "Customer-managed key rotation disabled",      "check": "kms_cmk_rotation_enabled",             "remediation": "Enable automatic annual key rotation",                                "terraform_fix": "remediation/s3.tf"},
+    {"id": "F11", "severity": "high",     "service": "GuardDuty",  "title": "GuardDuty detector disabled",                 "check": "guardduty_is_enabled",                 "remediation": "Enable GuardDuty in every active region",                             "terraform_fix": "remediation/logging.tf"},
+    {"id": "F12", "severity": "medium",   "service": "EC2",        "title": "EBS encryption by default is off",            "check": "ec2_ebs_default_encryption",           "remediation": "Turn on account-level EBS encryption by default",                     "terraform_fix": "remediation/network.tf"},
+    {"id": "F13", "severity": "medium",   "service": "IAM",        "title": "Password policy does not require symbols",    "check": "iam_password_policy_symbol",           "remediation": "Require symbols, 14+ characters and reuse prevention",                "terraform_fix": "remediation/iam.tf"},
+    {"id": "F14", "severity": "low",      "service": "S3",         "title": "Server access logging not enabled",           "check": "s3_bucket_server_access_logging_enabled", "remediation": "Enable S3 server access logging to a dedicated log bucket",          "terraform_fix": "remediation/s3.tf"}
+  ]
+}
